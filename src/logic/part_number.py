@@ -47,7 +47,7 @@ async def part_num_1(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["156194946"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -63,7 +63,7 @@ async def part_num_2(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["156194947"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -80,7 +80,7 @@ async def part_num_3(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["106744336"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -97,7 +97,7 @@ async def part_num_4(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["145796918"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -114,7 +114,7 @@ async def part_num_5(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["106744333"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -131,7 +131,7 @@ async def part_num_6(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["193957902"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -148,7 +148,7 @@ async def part_num_7(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["193957739"]:
         await message.answer_photo(
             photo=types.FSInputFile(
@@ -165,7 +165,7 @@ async def part_num_8(message: types.Message):
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
     )
-    await sleep(2)
+    await sleep(1)
     for photo in photo_dict["193954506"]:
         await message.answer_photo(
             photo=types.FSInputFile(
