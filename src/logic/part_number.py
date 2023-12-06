@@ -59,6 +59,7 @@ async def part_num_1(message: types.Message):
 
 @part_number_router.message(F.text == '156194947')
 async def part_num_2(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -71,11 +72,11 @@ async def part_num_2(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '106744336')
 async def part_num_3(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -88,11 +89,11 @@ async def part_num_3(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '145796918')
 async def part_num_4(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -105,11 +106,11 @@ async def part_num_4(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '106744333')
 async def part_num_5(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -122,11 +123,11 @@ async def part_num_5(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '193957902')
 async def part_num_6(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -139,11 +140,11 @@ async def part_num_6(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '193957739')
 async def part_num_7(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -156,11 +157,11 @@ async def part_num_7(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
 
 
 @part_number_router.message(F.text == '193954506')
 async def part_num_8(message: types.Message):
+    await message.delete()
     await message.answer(
         text="Лови несколько удачных образов под разный повод😎",
         reply_markup=cancel_button
@@ -173,4 +174,3 @@ async def part_num_8(message: types.Message):
             )
         )
         await sleep(2)
-    await message.delete()
