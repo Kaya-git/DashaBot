@@ -37,7 +37,7 @@ def get_inline_keyboard():
     )
     inline_keyboard_builder.button(
         text='Cсылка на магазин',
-        url='https://vk.com/evgenybuzuev'
+        url='https://www.wildberries.ru/brands/chix'
     )
 
     inline_keyboard_builder.adjust(4, 4)
