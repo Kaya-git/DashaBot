@@ -1,5 +1,6 @@
 from aiogram import F, Router, types
-from keyboards import kb_main_menu
+from keyboards.reply import kb_main_menu
+
 
 back_router = Router(name="back")
 
