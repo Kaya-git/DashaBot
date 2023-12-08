@@ -4,6 +4,7 @@ from config import conf
 import logging
 from aiogram.filters import CommandStart
 from logic.callback import part_number_router
+from logic.smth_else import smth_else_router
 from logic.back import back_router
 from keyboards.inline import get_inline_keyboard
 
@@ -11,8 +12,8 @@ from keyboards.inline import get_inline_keyboard
 bot = Bot(token=conf.telegram.bot_token)
 dp = Dispatcher()
 
-
 dp.include_router(part_number_router)
+dp.include_router(smth_else_router)
 dp.include_router(back_router)
 
 
