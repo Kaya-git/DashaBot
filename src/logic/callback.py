@@ -42,13 +42,14 @@ part_number_router = Router(name="part_number")
 
 
 @part_number_router.callback_query()
-async def select_part_number(call: CallbackQuery, bot: Bot):
+async def select_part_number(call: CallbackQuery):
     await call.message.answer(
             text="Лови несколько удачных образов под разный повод😎",
         )
     print(call.data)
     for photo in photo_dict[call.data]:
-        await call.message.answer_photo(types.FSInputFile(path=photo))
+        path = photo
+        await call.message.answer_photo(types.FSInputFile(path=path))
         await sleep(2)
 
     await call.message.answer(
