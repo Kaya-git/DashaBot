@@ -48,8 +48,9 @@ async def select_part_number(call: CallbackQuery):
         )
     print(call.data)
     for photo in photo_dict[call.data]:
-        path = photo
-        await call.message.answer_photo(types.FSInputFile(path=path))
+        img_path = types.FSInputFile(path=photo)
+        await call.message.answer_photo(photo=img_path)
+        # await call.message.answer_photo(photo=open(photo, 'rb'))
         await sleep(2)
 
     await call.message.answer(
