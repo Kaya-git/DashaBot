@@ -33,8 +33,16 @@ photo_dict = {
         'tmp/106744333/photo_2023-12-06_11-01-49.jpg',
         'tmp/106744333/photo_2023-12-06_11-01-50.jpg'
     ],
-    '193957902': [],
-    '193957739': [],
+    '193957902': [
+        'tmp/193957902/basemilk1.jpg',
+        'tmp/193957902/basemilk2.jpg',
+        'tmp/193957902/basemilk3.jpg'
+    ],
+    '193957739': [
+        'tmp/193957739/baseblack1.jpg',
+        'tmp/193957739/baseblack2.jpg',
+        'tmp/193957739/baseblack3.jpg'
+    ],
     '193954506': []
 }
 
