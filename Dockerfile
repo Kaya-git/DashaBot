@@ -1,6 +1,6 @@
 FROM python:3.11.6
 
-ENV BOT_TOKEN=6428826459:AAEVOR31vZh8LOlHcdUrK3SZS1Kr_ogljEU
+ENV BOT_TOKEN=????
 
 RUN mkdir /dasha_bot
 
