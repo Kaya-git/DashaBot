@@ -43,8 +43,16 @@ photo_dict = {
         'tmp/193957739/baseblack2.jpg',
         'tmp/193957739/baseblack3.jpg'
     ],
-    '193954506': []
+    '193954506': [
+        'tmp/193954506/trendyknits1.jpg',
+        'tmp/193954506/trendyknits2.jpg',
+        'tmp/193954506/trendyknits3.jpg',
+        'tmp/193954506/trendyknits4.jpg',
+        'tmp/193954506/trendyknits5.jpg',
+        'tmp/193954506/trendyknits6.jpg'
+    ]
 }
+
 
 part_number_router = Router(name="part_number")
 
