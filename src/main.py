@@ -16,9 +16,17 @@ dp.include_router(part_number_router)
 dp.include_router(smth_else_router)
 dp.include_router(back_router)
 
+COUNT_USERS = 0
+
 
 @dp.message(CommandStart())
 async def handle_start(message: types.Message):
+    global COUNT_USERS
+    COUNT_USERS += 1
+    await bot.send_message(
+        378288967,
+        f"Переход на бота! Общее кол-во переходов: {COUNT_USERS}"
+    )
     await message.answer(
         text="""Привет, модница!
 
