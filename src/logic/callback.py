@@ -1,61 +1,15 @@
 from aiogram import Router, types
+from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from asyncio import sleep
 from keyboards.inline import get_inline_keyboard
+from utils import callbackdata
+from aiogram import F
+from finalstate.fsm import GarantStates
+from aiogram.types import Message
 
 
-photo_dict = {
-    '156194946': [
-        "tmp/156194946/photo_2023-12-06_11-00-20.jpg",
-        "tmp/156194946/photo_2023-12-06_11-00-21.jpg",
-        "tmp/156194946/photo_2023-12-06_11-00-22.jpg",
-        "tmp/156194946/photo_2023-12-06_11-00-28.jpg"
-    ],
-    '156194947': [
-        'tmp/156194947/photo_2023-12-06_11-00-42.jpg',
-        'tmp/156194947/photo_2023-12-06_11-00-49.jpg',
-        'tmp/156194947/photo_2023-12-06_11-00-51.jpg'
-    ],
-    '106744336': [
-        'tmp/106744336/photo_2023-12-06_11-01-12.jpg',
-        'tmp/106744336/photo_2023-12-06_11-01-13.jpg',
-        'tmp/106744336/photo_2023-12-06_11-01-15.jpg'
-    ],
-    '145796918': [
-        'tmp/145796918/photo_2023-12-06_11-01-31.jpg',
-        'tmp/145796918/photo_2023-12-06_11-01-32.jpg',
-        'tmp/145796918/photo_2023-12-06_11-01-33.jpg'
-    ],
-    '106744333': [
-        'tmp/106744333/photo_2023-12-06_11-01-46.jpg',
-        'tmp/106744333/photo_2023-12-06_11-01-47 (2).jpg',
-        'tmp/106744333/photo_2023-12-06_11-01-47.jpg',
-        'tmp/106744333/photo_2023-12-06_11-01-49.jpg',
-        'tmp/106744333/photo_2023-12-06_11-01-50.jpg'
-    ],
-    '193957902': [
-        'tmp/193957902/basemilk1.jpg',
-        'tmp/193957902/basemilk2.jpg',
-        'tmp/193957902/basemilk3.jpg'
-    ],
-    '193957739': [
-        'tmp/193957739/baseblack1.jpg',
-        'tmp/193957739/baseblack2.jpg',
-        'tmp/193957739/baseblack3.jpg'
-    ],
-    '193954506': [
-        'tmp/193954506/trendyknits1.jpg',
-        'tmp/193954506/trendyknits2.jpg',
-        'tmp/193954506/trendyknits3.jpg',
-        'tmp/193954506/trendyknits4.jpg',
-        'tmp/193954506/trendyknits5.jpg',
-        'tmp/193954506/trendyknits6.jpg'
-    ]
-}
-
-
-part_number_router = Router(name="part_number")
-
+logic_router = Router(name="logic_router")
 
 @part_number_router.callback_query()
 async def select_part_number(call: CallbackQuery):
