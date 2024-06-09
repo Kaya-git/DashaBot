@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from asyncio import sleep
-from keyboards.inline import get_inline_keyboard
+from keyboards.inline import get_inline_keyboards
 from utils import callbackdata
 from aiogram import F
 from finalstate.fsm import GarantStates
@@ -41,7 +41,7 @@ async def problem_text(
     await state.update_data(problem_text=message.text)
     await message.reply(
         text="Благодарим вас за обращение. Представитель скоро с вами свяжется",
-        reply_markup=get_inline_keyboard.get_main_inline_keyboard()
+        reply_markup=get_inline_keyboards.get_main_inline_keyboard()
     )
 
     await conf.telegram.bot.send_message(

@@ -2,7 +2,6 @@ from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from asyncio import sleep
-from keyboards.inline import get_inline_keyboard
 from utils import callbackdata
 from aiogram import F
 from finalstate.fsm import GarantStates
@@ -18,15 +17,13 @@ minigame_router = Router(name="Мини Игра")
 ))
 async def minigame(
     query: CallbackQuery,
-    callback: callbackdata.MiniGame,
-    state: FSMContext,
-    message: Message
+    state: FSMContext
 ):
 
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
-    await message.reply(
+    await query.message.answer(
         text="""
         К сожалению, мы пока не умеем писать игры,
         но зато по этой кнопке мы спрятали для тебя сюрприз!
@@ -34,9 +31,9 @@ async def minigame(
     )
     await sleep(5)
 
-    await message.delete()
+    await query.message.delete()
 
-    await message.reply(
+    await query.message.answer(
         text="""
         Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту!
         Пришли в ответном сообщении скриншот с отзывом,

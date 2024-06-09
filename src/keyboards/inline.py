@@ -47,37 +47,37 @@ class InKeyboards:
         self.inline_keyboard_builder.adjust(4, 4)
         return self.inline_keyboard_builder.as_markup()
 
-        def get_main_inline_keyboard(self):
+    def get_main_inline_keyboard(self):
 
-            self.inline_keyboard_builder.button(
-                text='Мини-игра',
-                callback_data=callbackdata.MiniGame(
-                    mini_game='mini_game'
-                )
+        self.inline_keyboard_builder.button(
+            text='Мини-игра',
+            callback_data=callbackdata.MiniGame(
+                mini_game='mini_game'
             )
+        )
 
-            self.inline_keyboard_builder.button(
-                text='Гарантия 6 месяцев',
-                callback_data=callbackdata.GarantRequest(
-                    request='garant_request'
-                )
+        self.inline_keyboard_builder.button(
+            text='Гарантия 6 месяцев',
+            callback_data=callbackdata.GarantRequest(
+                request='garant_request'
             )
+        )
 
-            self.inline_keyboard_builder.button(
-                text='Обращение по гарантии',
-                callback_data=callbackdata.GarantInfo(
-                    garant_info='garant'
-                )
+        self.inline_keyboard_builder.button(
+            text='Обращение по гарантии',
+            callback_data=callbackdata.GarantInfo(
+                garant_info='garant'
             )
+        )
 
-            self.inline_keyboard_builder.button(
-                text='Посмотреть образы',
-                callback_data=callbackdata.GarantInfo(
-                    garant_info='looks'
-                )
+        self.inline_keyboard_builder.button(
+            text='Посмотреть образы',
+            callback_data=callbackdata.GarantInfo(
+                garant_info='looks'
             )
-            self.inline_keyboard_builder.adjust(1, 1, 1, 1)
-            return self.inline_keyboard_builder.as_markup()
+        )
+        self.inline_keyboard_builder.adjust(1, 1, 1, 1)
+        return self.inline_keyboard_builder.as_markup()
 
 
 get_inline_keyboards = InKeyboards()

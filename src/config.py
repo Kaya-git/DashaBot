@@ -15,6 +15,7 @@ class TelegramBot:
 
 @dataclass
 class Configuration:
+    prev_reply = None
     telegram = TelegramBot()
 
 

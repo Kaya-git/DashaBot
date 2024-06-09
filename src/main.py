@@ -3,7 +3,9 @@ import asyncio
 from config import conf
 import logging
 from aiogram.filters import CommandStart
-from logic.callback import part_number_router
+from logic.gamebutton import minigame_router
+from logic.garant6months import garant6months_router
+from logic.garantinfo import garantinfologic
 from logic.smth_else import smth_else_router
 from logic.back import back_router
 from keyboards.inline import get_inline_keyboards
@@ -11,9 +13,10 @@ from keyboards.inline import get_inline_keyboards
 
 dp = Dispatcher()
 
-dp.include_router(part_number_router)
+dp.include_router(minigame_router)
+dp.include_router(garant6months_router)
+dp.include_router(garantinfologic)
 dp.include_router(smth_else_router)
-dp.include_router(back_router)
 
 COUNT_USERS = 0
 
@@ -26,7 +29,7 @@ async def handle_start(message: types.Message):
         378288967,
         f"Переход на бота! Общее кол-во переходов: {COUNT_USERS}"
     )
-    await message.answer(
+    conf.prev_reply = await message.answer(
         text="""Привет!
 
 Этот бот поможет тебе решить вопросы по гарантии на наш товар. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!""",
