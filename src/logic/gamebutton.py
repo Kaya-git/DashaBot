@@ -3,6 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from asyncio import sleep
 from utils import callbackdata
+from keyboards.inline import main_menu
 from aiogram import F
 from finalstate.fsm import GarantStates
 from aiogram.types import Message
@@ -20,50 +21,66 @@ async def minigame(
     state: FSMContext
 ):
 
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
+
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
-    await query.message.answer(
+    await state.set_state(GarantStates.message_to_delete)
+
+    await state.update_data(message_to_delete=await query.message.answer(
         text="""
         К сожалению, мы пока не умеем писать игры,
         но зато по этой кнопке мы спрятали для тебя сюрприз!
         """
-    )
+    ))
+
     await sleep(5)
 
-    await query.message.delete()
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
 
-    await query.message.answer(
+    await state.set_state(GarantStates.message_to_delete)
+
+    await state.update_data(message_to_delete=await query.message.answer(
         text="""
         Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту!
         Пришли в ответном сообщении скриншот с отзывом,
         и наш менеджер свяжется с тобой для получения кэшбэка
-        """
-    )
+        """,
+        reply_markup=await main_menu()
+    ))
 
-    await state.set_state(GarantStates.screen_shot)
 
-
-@minigame_router.message(GarantStates.screen_shot)
+@minigame_router.message(F.photo, ~F.caption)
 async def screenshot(
     message: Message,
     state: FSMContext,
 ):
-    file_id = message.document.file_id
-
-    file = await conf.telegram.bot.get_file(file_id)
-    file_path = file.file_path
-
-    await state.update_data(screen_shot=file_path)
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
 
     await conf.telegram.bot.send_message(
-        378288967,
-        f"""
-            Новый отзыв:
-            id: {state.client_telegram_id},
-            Message: {state.file_path}
-        """
+        chat_id=378288967,
+        text=f"Новый отзыв от: {data["client_telegram_id"]}"
     )
-    await state.clear()
-    await sleep(5)
+    await conf.telegram.bot.send_photo(
+        chat_id=378288967,
+        photo=message.photo[-1].file_id
+    )
+    await state.set_state(GarantStates.screen_shot)
+    await state.update_data(screenshot=message.photo[-1].file_id)
+
+    await state.set_state(GarantStates.message_to_delete)
+
+    await state.update_data(message_to_delete=await message.answer(
+        text="""
+        Благодарим за отзыв.
+        Наш менеджер скоро свяжется с вами.
+        Удостоверьтесь, что у вас открыта личка.
+        """,
+        reply_markup=await main_menu()
+    ))
+
     await message.delete()

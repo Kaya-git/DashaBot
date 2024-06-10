@@ -8,7 +8,9 @@ from logic.garant6months import garant6months_router
 from logic.garantinfo import garantinfologic
 from logic.smth_else import smth_else_router
 from logic.back import back_router
-from keyboards.inline import get_inline_keyboards
+from keyboards.inline import get_main_inline_keyboard
+from finalstate.fsm import GarantStates
+from aiogram.fsm.context import FSMContext
 
 
 dp = Dispatcher()
@@ -17,24 +19,31 @@ dp.include_router(minigame_router)
 dp.include_router(garant6months_router)
 dp.include_router(garantinfologic)
 dp.include_router(smth_else_router)
+dp.include_router(back_router)
 
 COUNT_USERS = 0
 
 
 @dp.message(CommandStart())
-async def handle_start(message: types.Message):
+async def handle_start(message: types.Message, state: FSMContext):
+
     global COUNT_USERS
     COUNT_USERS += 1
     await conf.telegram.bot.send_message(
         378288967,
         f"Переход на бота! Общее кол-во переходов: {COUNT_USERS}"
     )
-    conf.prev_reply = await message.answer(
-        text="""Привет!
 
-Этот бот поможет тебе решить вопросы по гарантии на наш товар. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!""",
-        reply_markup=get_inline_keyboards.get_main_inline_keyboard()
+    await state.set_state(GarantStates.message_to_delete)
+    md = await message.answer(
+        text="""Привет!
+            Этот бот поможет тебе решить вопросы по гарантии на наш товар.
+            Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
+        """,
+        reply_markup=await get_main_inline_keyboard()
     )
+    await state.update_data(message_to_delete=md)
+
     await message.delete()
 
 

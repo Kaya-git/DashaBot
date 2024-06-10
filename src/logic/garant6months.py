@@ -1,8 +1,8 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from asyncio import sleep
-from keyboards.inline import get_inline_keyboards
+from keyboards.inline import get_main_inline_keyboard
+from keyboards.inline import main_menu
 from utils import callbackdata
 from aiogram import F
 from finalstate.fsm import GarantStates
@@ -22,15 +22,18 @@ async def garantrequest(
     query: CallbackQuery,
     state: FSMContext
 ):
-    await conf.prev_reply.delete()
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
+
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
+    await state.set_state(GarantStates.message_to_delete)
+    await state.update_data(message_to_delete=await query.message.answer(
+        text="для получения продвинутой гарантии, напишите, пожалуйста, ваше имя и номер телефона",
+        reply_markup=await main_menu()
+    ))
     await state.set_state(GarantStates.client_cellphone_num)
-
-    conf.prev_reply = await query.message.answer(
-        text="для получения продвинутой гарантии, напишите, пожалуйста, ваше имя и номер телефона "
-    )
 
 
 @garant6months_router.message(GarantStates.client_cellphone_num)
@@ -38,11 +41,14 @@ async def cellphonerequest(
     message: Message,
     state: FSMContext
 ):
-    await conf.prev_reply.delete()
 
     await state.update_data(client_cellphone_num=message.text)
 
-    conf.prev_reply = await message.reply(
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
+
+    await state.set_state(GarantStates.message_to_delete)
+    await state.update_data(message_to_delete=await message.answer(
         text="""
         Поздравляем!
         Теперь при возникновении любой проблемы в течение 6 месяцев
@@ -50,8 +56,8 @@ async def cellphonerequest(
         (по кнопке «Обращение по гарантии»),
         и наш менеджер поможет вам с решением проблемы!
         """,
-        reply_markup=get_inline_keyboards.get_main_inline_keyboard()
-    )
+        reply_markup=await get_main_inline_keyboard()
+    ))
 
     data = await state.get_data()
 
@@ -63,6 +69,5 @@ async def cellphonerequest(
             Message: {data["client_cellphone_num"]}
         """
     )
-    await state.clear()
-    await sleep(5)
+
     await message.delete()

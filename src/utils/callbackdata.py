@@ -13,5 +13,5 @@ class GarantRequest(CallbackData, prefix='request'):
     request: str
 
 
-class ChixLooks(CallbackData, prefix='looks'):
-    looks: str
+class MenuRequest(CallbackData, prefix='menu'):
+    menu: str
