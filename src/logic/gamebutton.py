@@ -60,7 +60,11 @@ async def screenshot(
 
     await conf.telegram.bot.send_message(
         chat_id=378288967,
-        text=f"Новый отзыв 'id': {data["client_telegram_id"]}; 'username' {message.from_user.username}"
+        text=f"""
+        Новый отзыв:
+        'id': {data["client_telegram_id"]},
+        'username' {message.from_user.username}
+    """
     )
     await conf.telegram.bot.send_photo(
         chat_id=378288967,
