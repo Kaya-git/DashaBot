@@ -37,8 +37,7 @@ async def handle_start(message: types.Message, state: FSMContext):
     await state.set_state(GarantStates.message_to_delete)
     md = await message.answer(
         text="""Привет!
-            Этот бот поможет тебе решить вопросы по гарантии на наш товар.
-            Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
+Этот бот поможет тебе оформить гарантию на свой товар, либо обратиться по гарантийному случаю. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
         """,
         reply_markup=await get_main_inline_keyboard()
     )

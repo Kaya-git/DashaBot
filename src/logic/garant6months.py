@@ -50,11 +50,7 @@ async def cellphonerequest(
     await state.set_state(GarantStates.message_to_delete)
     await state.update_data(message_to_delete=await message.answer(
         text="""
-        Поздравляем!
-        Теперь при возникновении любой проблемы в течение 6 месяцев
-        вы можете связаться с нами через этот бот
-        (по кнопке «Обращение по гарантии»),
-        и наш менеджер поможет вам с решением проблемы!
+        Поздравляем! Теперь при возникновении любой проблемы в течение 6 месяцев вы можете связаться с нами через этот бот(по кнопке «Обращение по гарантии»), и наш менеджер поможет вам с решением проблемы!
         """,
         reply_markup=await get_main_inline_keyboard()
     ))
@@ -66,6 +62,7 @@ async def cellphonerequest(
         f"""
             Новая гарантия:
             id: {data["client_telegram_id"]},
+            username: {message.from_user.username}
             Message: {data["client_cellphone_num"]}
         """
     )

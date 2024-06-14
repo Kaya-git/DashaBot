@@ -28,8 +28,7 @@ async def garantinfo(
 
     await state.set_state(GarantStates.message_to_delete)
     await state.update_data(message_to_delete=await query.message.answer(
-        text="""Опишите вашу проблему в ответном сообщении,
-        и наш менеджер свяжется с вами в течение суток.""",
+        text="""Опишите вашу проблему в ответном сообщении, и наш менеджер свяжется с вами в течение суток.""",
         reply_markup=await main_menu()
     ))
 
@@ -50,9 +49,7 @@ async def problem_text(
     await state.set_state(GarantStates.message_to_delete)
     await state.update_data(message_to_delete=await message.reply(
         text="""
-        Благодарим вас за обращение.
-        Представитель скоро с вами свяжется в личном сообщении.
-        Убедитесь, что вам возможно писать сообщения.
+        Благодарим вас за обращение. Представитель скоро с вами свяжется в личном сообщении. Убедитесь, что вам возможно отправлять сообщения.
         """,
         reply_markup=await get_main_inline_keyboard()
     ))
@@ -63,6 +60,7 @@ async def problem_text(
         f"""
             Новое обращение:
             id: {data["client_telegram_id"]},
+            username: {message.from_user.username}
             Message: {data["problem_text"]}
         """
     )

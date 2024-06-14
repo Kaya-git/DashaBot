@@ -31,8 +31,7 @@ async def minigame(
 
     await state.update_data(message_to_delete=await query.message.answer(
         text="""
-        К сожалению, мы пока не умеем писать игры,
-        но зато по этой кнопке мы спрятали для тебя сюрприз!
+        К сожалению, мы пока не умеем писать игры, но зато по этой кнопке мы спрятали для тебя сюрприз!
         """
     ))
 
@@ -45,9 +44,7 @@ async def minigame(
 
     await state.update_data(message_to_delete=await query.message.answer(
         text="""
-        Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту!
-        Пришли в ответном сообщении скриншот с отзывом,
-        и наш менеджер свяжется с тобой для получения кэшбэка
+        Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту! Пришли в ответном сообщении скриншот с отзывом, и наш менеджер свяжется с тобой для получения кэшбэка
         """,
         reply_markup=await main_menu()
     ))
@@ -63,7 +60,7 @@ async def screenshot(
 
     await conf.telegram.bot.send_message(
         chat_id=378288967,
-        text=f"Новый отзыв от: {data["client_telegram_id"]}"
+        text=f"Новый отзыв 'id': {data["client_telegram_id"]}; 'username' {message.from_user.username}"
     )
     await conf.telegram.bot.send_photo(
         chat_id=378288967,
@@ -76,9 +73,7 @@ async def screenshot(
 
     await state.update_data(message_to_delete=await message.answer(
         text="""
-        Благодарим за отзыв.
-        Наш менеджер скоро свяжется с вами.
-        Удостоверьтесь, что у вас открыта личка.
+        Благодарим за отзыв. Наш менеджер скоро свяжется с вами. Удостоверьтесь, что у вас открытый аккаунт и мы сможем вам отправить сообщение.
         """,
         reply_markup=await main_menu()
     ))
