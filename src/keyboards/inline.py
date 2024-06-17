@@ -25,7 +25,15 @@ async def get_main_inline_keyboard():
             garant_info='garant'
         )
     )
-    inline_keyboard_builder.adjust(1, 1, 1, 1)
+
+    inline_keyboard_builder.button(
+        text='Задать вопрос',
+        callback_data=callbackdata.QuestionRequest(
+            question='question'
+        )
+    )
+
+    inline_keyboard_builder.adjust(1, 1, 1, 1, 1)
     return inline_keyboard_builder.as_markup()
 
 

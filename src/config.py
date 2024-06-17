@@ -15,6 +15,7 @@ class TelegramBot:
 
 @dataclass
 class Configuration:
+    chat_id = os.environ.get("CHAT_ID")
     prev_reply = None
     telegram = TelegramBot()
 

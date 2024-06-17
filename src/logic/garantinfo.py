@@ -1,7 +1,7 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from keyboards.inline import get_main_inline_keyboard, main_menu
+from keyboards.inline import main_menu
 from utils import callbackdata
 from aiogram import F
 from finalstate.fsm import GarantStates
@@ -51,13 +51,13 @@ async def problem_text(
         text="""
         Благодарим вас за обращение. Представитель скоро с вами свяжется в личном сообщении. Убедитесь, что вам возможно отправлять сообщения.
         """,
-        reply_markup=await get_main_inline_keyboard()
+        reply_markup=await main_menu()
     ))
 
     data = await state.get_data()
     await conf.telegram.bot.send_message(
-        378288967,
-        f"""
+        chat_id=conf.chat_id,
+        text=f"""
             Новое обращение:
             id: {data["client_telegram_id"]},
             username: {message.from_user.username}

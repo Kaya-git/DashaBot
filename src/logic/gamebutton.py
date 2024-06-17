@@ -44,7 +44,7 @@ async def minigame(
 
     await state.update_data(message_to_delete=await query.message.answer(
         text="""
-        Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту! Пришли в ответном сообщении скриншот с отзывом, и наш менеджер свяжется с тобой для получения кэшбэка
+        Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту! Пришли в ответном сообщении скриншот с отзывом.
         """,
         reply_markup=await main_menu()
     ))
@@ -58,18 +58,6 @@ async def screenshot(
     data = await state.get_data()
     await data["message_to_delete"].delete()
 
-    await conf.telegram.bot.send_message(
-        chat_id=378288967,
-        text=f"""
-        Новый отзыв:
-        'id': {data["client_telegram_id"]},
-        'username' {message.from_user.username}
-    """
-    )
-    await conf.telegram.bot.send_photo(
-        chat_id=378288967,
-        photo=message.photo[-1].file_id
-    )
     await state.set_state(GarantStates.screen_shot)
     await state.update_data(screenshot=message.photo[-1].file_id)
 
@@ -77,9 +65,46 @@ async def screenshot(
 
     await state.update_data(message_to_delete=await message.answer(
         text="""
-        Благодарим за отзыв. Наш менеджер скоро свяжется с вами. Удостоверьтесь, что у вас открытый аккаунт и мы сможем вам отправить сообщение.
+        Благодарим за отзыв. Напишите реквизиты для перевода в формате "номер телефона, наименование банка" ,либо "номер банковской карты, наименование банка"
+        """
+    ))
+    await state.set_state(GarantStates.requisites)
+    await message.delete()
+
+
+@minigame_router.message(GarantStates.requisites)
+async def cellphonerequest(
+    message: Message,
+    state: FSMContext
+):
+
+    await state.update_data(requisites=message.text)
+
+    data = await state.get_data()
+    await data["message_to_delete"].delete()
+
+    await state.set_state(GarantStates.message_to_delete)
+    await state.update_data(message_to_delete=await message.answer(
+        text="""
+        Благодарим вас, деньги скоро поступят по указанным реквизитам. Наш администратор пришлет вам квитанцию о переводе. Удостоверьтесь, что у вас открытый аккаунт.
         """,
         reply_markup=await main_menu()
     ))
+
+    data = await state.get_data()
+
+    await conf.telegram.bot.send_message(
+        chat_id=conf.chat_id,
+        text=f"""
+            Новый отзыв:
+            id: {data["client_telegram_id"]},
+            username: {message.from_user.username}
+            Requisties: {data["requisites"]}
+        """
+    )
+    await conf.telegram.bot.send_photo(
+        chat_id=conf.chat_id,
+        photo=data["screenshot"]
+    )
 
     await message.delete()

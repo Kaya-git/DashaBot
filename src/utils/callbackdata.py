@@ -15,3 +15,7 @@ class GarantRequest(CallbackData, prefix='request'):
 
 class MenuRequest(CallbackData, prefix='menu'):
     menu: str
+
+
+class QuestionRequest(CallbackData, prefix='question'):
+    question: str

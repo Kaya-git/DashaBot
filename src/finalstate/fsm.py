@@ -7,3 +7,5 @@ class GarantStates(StatesGroup):
     screen_shot = State()
     problem_text = State()
     message_to_delete = State()
+    question = State()
+    requisites = State()

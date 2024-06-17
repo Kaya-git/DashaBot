@@ -16,10 +16,6 @@ async def menu(query: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     data["message_to_delete"].delete()
 
-    # current_state = await state.get_state()
-    # if current_state is not None:
-    #     await state.clear()
-
     await state.set_state(GarantStates.message_to_delete)
 
     await state.update_data(message_to_delete=await query.message.answer(

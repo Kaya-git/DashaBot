@@ -1,25 +1,26 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from keyboards.inline import get_main_inline_keyboard
-from keyboards.inline import main_menu
+from asyncio import sleep
 from utils import callbackdata
+from keyboards.inline import main_menu
 from aiogram import F
 from finalstate.fsm import GarantStates
 from aiogram.types import Message
 from config import conf
 
 
-garant6months_router = Router(name="Гарантия на 6 месяцев")
+question_router = Router(name="Вопрос")
 
 
-@garant6months_router.callback_query(callbackdata.GarantRequest.filter(
-    F.request == "garant_request"
+@question_router.callback_query(callbackdata.QuestionRequest.filter(
+    F.question == "question"
 ))
-async def garantrequest(
+async def ask_admin(
     query: CallbackQuery,
     state: FSMContext
 ):
+
     data = await state.get_data()
     await data["message_to_delete"].delete()
 
@@ -27,30 +28,33 @@ async def garantrequest(
     await state.update_data(client_telegram_id=query.from_user.id)
 
     await state.set_state(GarantStates.message_to_delete)
+
     await state.update_data(message_to_delete=await query.message.answer(
-        text="для получения продвинутой гарантии, напишите, пожалуйста, ваше имя и номер телефона",
+        text="""
+        Напиши свой вопрос. Убедись, что у тебя незакрытый аккаунт.
+        """,
         reply_markup=await main_menu()
     ))
-    await state.set_state(GarantStates.client_cellphone_num)
+    await state.set_state(GarantStates.question)
 
 
-@garant6months_router.message(GarantStates.client_cellphone_num)
-async def cellphonerequest(
+@question_router.message(GarantStates.question)
+async def question_retrive(
     message: Message,
     state: FSMContext
 ):
 
-    await state.update_data(client_cellphone_num=message.text)
-
     data = await state.get_data()
     await data["message_to_delete"].delete()
+
+    await state.update_data(question=message.text)
 
     await state.set_state(GarantStates.message_to_delete)
     await state.update_data(message_to_delete=await message.answer(
         text="""
-        Поздравляем! Теперь при возникновении любой проблемы в течение 6 месяцев вы можете связаться с нами через этот бот(по кнопке «Обращение по гарантии»), и наш менеджер поможет вам с решением проблемы!
+        Благодарим вас за обращение. Наш администратор скоро свяжется с вами
         """,
-        reply_markup=await get_main_inline_keyboard()
+        reply_markup=await main_menu()
     ))
 
     data = await state.get_data()
@@ -58,10 +62,10 @@ async def cellphonerequest(
     await conf.telegram.bot.send_message(
         chat_id=conf.chat_id,
         text=f"""
-            Новая гарантия:
+            Новый вопрос:
             id: {data["client_telegram_id"]},
             username: {message.from_user.username}
-            Message: {data["client_cellphone_num"]}
+            Message: {data["question"]}
         """
     )
 
