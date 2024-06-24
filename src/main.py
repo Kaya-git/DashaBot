@@ -31,11 +31,6 @@ dp.include_router(smth_else_router)
 @dp.message(CommandStart())
 async def handle_start(message: types.Message, state: FSMContext):
 
-    # data = await state.get_data()
-
-    # if "message_to_delete" in data:
-    #     await data["message_to_delete"].delete()
-
     await state.set_state(GarantStates.message_to_delete)
 
     md = await message.answer(

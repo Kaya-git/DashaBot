@@ -22,6 +22,12 @@ async def menu(query: CallbackQuery, state: FSMContext):
             data["message_to_delete"]
         )
 
+    if "message_to_delete_2" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete_2"]
+        )
+
     await state.set_state(GarantStates.message_to_delete)
 
     await state.update_data(message_to_delete=(await query.message.answer(
@@ -30,4 +36,3 @@ async def menu(query: CallbackQuery, state: FSMContext):
         """,
         reply_markup=await get_main_inline_keyboard()
     )).message_id)
-    # await query.message.delete()
