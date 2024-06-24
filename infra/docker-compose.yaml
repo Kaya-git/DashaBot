@@ -1,0 +1,19 @@
+services:
+
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: redis_app
+    ports: 
+    - "6379:6379"
+
+  telegram_bot:
+    build: 
+      context: ../
+    env_file:
+      - ../.env
+    container_name: telegram_bot
+    ports:
+      - 9999:8000
+    depends_on:
+      - redis
