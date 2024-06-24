@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from finalstate.fsm import GarantStates
 from utils import callbackdata
 from aiogram.types import CallbackQuery
+from config import conf
 
 back_router = Router(name="back")
 
@@ -14,14 +15,19 @@ back_router = Router(name="back")
 async def menu(query: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
-    data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.message_to_delete)
 
-    await state.update_data(message_to_delete=await query.message.answer(
+    await state.update_data(message_to_delete=(await query.message.answer(
         text="""
-            Этот бот поможет тебе решить вопросы по гарантии на наш товар. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
+            Этот бот поможет Вам решить вопросы по гарантии на наш товар. Обязательно опробуйте нашу игру по кнопке снизу и заберите свой приз!
         """,
         reply_markup=await get_main_inline_keyboard()
-    ))
-    await query.message.delete()
+    )).message_id)
+    # await query.message.delete()

@@ -22,32 +22,36 @@ async def minigame(
 ):
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
     await state.set_state(GarantStates.message_to_delete)
 
-    await state.update_data(message_to_delete=await query.message.answer(
+    await state.update_data(message_to_delete=(await query.message.answer(
         text="""
-        К сожалению, мы пока не умеем писать игры, но зато по этой кнопке мы спрятали для тебя сюрприз!
+        К сожалению, мы пока не умеем писать игры, но зато по этой кнопке мы спрятали для Вас сюрприз!
         """
-    ))
+    )).message_id)
 
-    await sleep(5)
+    await sleep(1)
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
 
-    await state.set_state(GarantStates.message_to_delete)
+    await state.set_state(GarantStates.message_to_delete_2)
 
-    await state.update_data(message_to_delete=await query.message.answer(
+    await state.update_data(message_to_delete_2=(await query.message.answer(
         text="""
-        Оставь отзыв на ВБ, и получи кэшбэк 150₽ на карту! Пришли в ответном сообщении скриншот с отзывом.
+        Оставьте отзыв на ВБ, и получите кэшбэк 150₽ на карту! Пришлите в ответном сообщении скриншот с отзывом.
         """,
         reply_markup=await main_menu()
-    ))
+    )).message_id)
 
 
 @minigame_router.message(F.photo, ~F.caption)
@@ -56,18 +60,30 @@ async def screenshot(
     state: FSMContext,
 ):
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
+
+    if "message_to_delete_2" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete_2"]
+        )
 
     await state.set_state(GarantStates.screen_shot)
     await state.update_data(screenshot=message.photo[-1].file_id)
 
     await state.set_state(GarantStates.message_to_delete)
 
-    await state.update_data(message_to_delete=await message.answer(
+    await state.update_data(message_to_delete=(await message.answer(
         text="""
         Благодарим за отзыв. Напишите реквизиты для перевода в формате "номер телефона, наименование банка" ,либо "номер банковской карты, наименование банка"
-        """
-    ))
+        """,
+        reply_markup=await main_menu()
+    )).message_id)
     await state.set_state(GarantStates.requisites)
     await message.delete()
 
@@ -81,15 +97,20 @@ async def cellphonerequest(
     await state.update_data(requisites=message.text)
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await message.answer(
+    await state.update_data(message_to_delete=(await message.answer(
         text="""
-        Благодарим вас, деньги скоро поступят по указанным реквизитам. Наш администратор пришлет вам квитанцию о переводе. Удостоверьтесь, что у вас открытый аккаунт.
+        Благодарим Вас, деньги скоро поступят по указанным реквизитам. Наш администратор пришлет Вам квитанцию о переводе. Удостоверьтесь, что у Вас открытый аккаунт.
         """,
         reply_markup=await main_menu()
-    ))
+    )).message_id)
 
     data = await state.get_data()
 

@@ -1,7 +1,6 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from keyboards.inline import get_main_inline_keyboard
 from keyboards.inline import main_menu
 from utils import callbackdata
 from aiogram import F
@@ -21,16 +20,21 @@ async def garantrequest(
     state: FSMContext
 ):
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await query.message.answer(
-        text="для получения продвинутой гарантии, напишите, пожалуйста, ваше имя и номер телефона",
+    await state.update_data(message_to_delete=(await query.message.answer(
+        text="Для получения продвинутой гарантии, напишите, пожалуйста, Ваше имя и номер телефона.",
         reply_markup=await main_menu()
-    ))
+    )).message_id)
     await state.set_state(GarantStates.client_cellphone_num)
 
 
@@ -43,15 +47,20 @@ async def cellphonerequest(
     await state.update_data(client_cellphone_num=message.text)
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await message.answer(
+    await state.update_data(message_to_delete=(await message.answer(
         text="""
-        Поздравляем! Теперь при возникновении любой проблемы в течение 6 месяцев вы можете связаться с нами через этот бот(по кнопке «Обращение по гарантии»), и наш менеджер поможет вам с решением проблемы!
+        Поздравляем! Теперь при возникновении любой проблемы в течение 6 месяцев Вы можете связаться с нами через этот бот(по кнопке «Обращение по гарантии»), и наш менеджер поможет Вам с решением проблемы!
         """,
-        reply_markup=await get_main_inline_keyboard()
-    ))
+        reply_markup=await main_menu()
+    )).message_id)
 
     data = await state.get_data()
 

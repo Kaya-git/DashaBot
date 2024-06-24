@@ -21,16 +21,21 @@ async def garantinfo(
 ):
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await query.message.answer(
-        text="""Опишите вашу проблему в ответном сообщении, и наш менеджер свяжется с вами в течение суток.""",
+    await state.update_data(message_to_delete=(await query.message.answer(
+        text="""Опишите Вашу проблему в ответном сообщении, и наш менеджер свяжется с Вами в течение суток.""",
         reply_markup=await main_menu()
-    ))
+    )).message_id)
 
     await state.set_state(GarantStates.problem_text)
 
@@ -42,17 +47,22 @@ async def problem_text(
 ):
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.update_data(problem_text=message.text)
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await message.reply(
+    await state.update_data(message_to_delete=(await message.reply(
         text="""
-        Благодарим вас за обращение. Представитель скоро с вами свяжется в личном сообщении. Убедитесь, что вам возможно отправлять сообщения.
+        Благодарим Вас за обращение. Представитель скоро с Вами свяжется в личном сообщении. Убедитесь, что Вам возможно отправлять сообщения.
         """,
         reply_markup=await main_menu()
-    ))
+    )).message_id)
 
     data = await state.get_data()
     await conf.telegram.bot.send_message(

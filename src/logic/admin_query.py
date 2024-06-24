@@ -1,7 +1,6 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from asyncio import sleep
 from utils import callbackdata
 from keyboards.inline import main_menu
 from aiogram import F
@@ -22,19 +21,24 @@ async def ask_admin(
 ):
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            query.message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.set_state(GarantStates.client_telegram_id)
     await state.update_data(client_telegram_id=query.from_user.id)
 
     await state.set_state(GarantStates.message_to_delete)
-
-    await state.update_data(message_to_delete=await query.message.answer(
+    md = await query.message.answer(
         text="""
-        Напиши свой вопрос. Убедись, что у тебя незакрытый аккаунт.
+        Напишите свой вопрос. Убедитесь, что у Вас незакрытый аккаунт.
         """,
         reply_markup=await main_menu()
-    ))
+    )
+    await state.update_data(message_to_delete=md.message_id)
     await state.set_state(GarantStates.question)
 
 
@@ -45,17 +49,22 @@ async def question_retrive(
 ):
 
     data = await state.get_data()
-    await data["message_to_delete"].delete()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
 
     await state.update_data(question=message.text)
 
     await state.set_state(GarantStates.message_to_delete)
-    await state.update_data(message_to_delete=await message.answer(
+    await state.update_data(message_to_delete=(await message.answer(
         text="""
-        Благодарим вас за обращение. Наш администратор скоро свяжется с вами
+        Благодарим Вас за обращение. Наш администратор скоро свяжется с Вами
         """,
         reply_markup=await main_menu()
-    ))
+    )).message_id)
 
     data = await state.get_data()
 

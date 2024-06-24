@@ -6,16 +6,16 @@ async def get_main_inline_keyboard():
     inline_keyboard_builder = InlineKeyboardBuilder()
 
     inline_keyboard_builder.button(
-        text='Мини-игра',
-        callback_data=callbackdata.MiniGame(
-            mini_game='mini_game'
+        text='Гарантия 6 месяцев',
+        callback_data=callbackdata.GarantRequest(
+            request='garant_request'
         )
     )
 
     inline_keyboard_builder.button(
-        text='Гарантия 6 месяцев',
-        callback_data=callbackdata.GarantRequest(
-            request='garant_request'
+        text='Мини-игра',
+        callback_data=callbackdata.MiniGame(
+            mini_game='mini_game'
         )
     )
 

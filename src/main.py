@@ -12,9 +12,13 @@ from logic.back import back_router
 from keyboards.inline import get_main_inline_keyboard
 from finalstate.fsm import GarantStates
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.storage.redis import RedisStorage
 
 
-dp = Dispatcher()
+storage = RedisStorage.from_url(
+    f"redis://{conf.redis.host}:{conf.redis.port}"
+)
+dp = Dispatcher(storage=storage)
 
 dp.include_router(minigame_router)
 dp.include_router(garant6months_router)
@@ -27,14 +31,20 @@ dp.include_router(smth_else_router)
 @dp.message(CommandStart())
 async def handle_start(message: types.Message, state: FSMContext):
 
+    # data = await state.get_data()
+
+    # if "message_to_delete" in data:
+    #     await data["message_to_delete"].delete()
+
     await state.set_state(GarantStates.message_to_delete)
+
     md = await message.answer(
         text="""Привет!
-        Этот бот поможет тебе оформить гарантию на свой товар, либо обратиться по гарантийному случаю. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
+    Этот бот поможет тебе оформить гарантию на свой товар, либо обратиться по гарантийному случаю. Обязательно опробуй нашу игру по кнопке снизу и забери свой приз!
         """,
         reply_markup=await get_main_inline_keyboard()
     )
-    await state.update_data(message_to_delete=md)
+    await state.update_data(message_to_delete=md.message_id)
 
     await message.delete()
 
