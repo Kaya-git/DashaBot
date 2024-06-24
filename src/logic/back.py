@@ -22,11 +22,13 @@ async def menu(query: CallbackQuery, state: FSMContext):
             data["message_to_delete"]
         )
 
-    if "message_to_delete_2" in data:
+    if "message_to_delete_2" in data and data["message_to_delete_2"] is not None:
         await conf.telegram.bot.delete_message(
             query.message.chat.id,
             data["message_to_delete_2"]
         )
+        await state.set_state(GarantStates.message_to_delete_2)
+        await state.update_data(message_to_delete_2=None)
 
     await state.set_state(GarantStates.message_to_delete)
 
