@@ -3,6 +3,7 @@ from finalstate.fsm import GarantStates
 from aiogram.fsm.context import FSMContext
 from keyboards.inline import main_menu
 from config import conf
+from aiogram import F
 
 
 smth_else_router = Router(name="smth_else")
@@ -28,5 +29,29 @@ async def smt_else(message: types.Message, state: FSMContext):
 
     await state.update_data(message_to_delete=(await message.answer(
         text="Простите, но Вы не можете писать сюда сообщения",
+        reply_markup=await main_menu()
+    )).message_id)
+
+
+@smth_else_router.message(F.photo, ~F.caption)
+async def smt_else_media(message: types.Message, state: FSMContext):
+
+    if int(message.chat.id) == int(conf.chat_id):
+        return None
+
+    data = await state.get_data()
+
+    if "message_to_delete" in data:
+        await conf.telegram.bot.delete_message(
+            message.chat.id,
+            data["message_to_delete"]
+        )
+
+    await message.delete()
+
+    await state.set_state(GarantStates.message_to_delete)
+
+    await state.update_data(message_to_delete=(await message.answer(
+        text="Простите, но Вы не можете отправлять картинки",
         reply_markup=await main_menu()
     )).message_id)

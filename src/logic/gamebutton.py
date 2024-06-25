@@ -52,9 +52,10 @@ async def minigame(
         """,
         reply_markup=await main_menu()
     )).message_id)
+    await state.set_state(GarantStates.screen_shot)
 
 
-@minigame_router.message(F.photo, ~F.caption)
+@minigame_router.message(GarantStates.screen_shot, F.photo, ~F.caption)
 async def screenshot(
     message: Message,
     state: FSMContext,
@@ -73,7 +74,6 @@ async def screenshot(
             data["message_to_delete_2"]
         )
 
-    await state.set_state(GarantStates.screen_shot)
     await state.update_data(screenshot=message.photo[-1].file_id)
 
     await state.set_state(GarantStates.message_to_delete)
