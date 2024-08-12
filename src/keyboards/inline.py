@@ -12,12 +12,12 @@ async def get_main_inline_keyboard():
         )
     )
 
-    inline_keyboard_builder.button(
-        text='Мини-игра',
-        callback_data=callbackdata.MiniGame(
-            mini_game='mini_game'
-        )
-    )
+    # inline_keyboard_builder.button(
+    #     text='Мини-игра',
+    #     callback_data=callbackdata.MiniGame(
+    #         mini_game='mini_game'
+    #     )
+    # )
 
     inline_keyboard_builder.button(
         text='Обращение по гарантии',
@@ -33,7 +33,7 @@ async def get_main_inline_keyboard():
         )
     )
 
-    inline_keyboard_builder.adjust(1, 1, 1, 1, 1)
+    inline_keyboard_builder.adjust(1, 1, 1, 1)
     return inline_keyboard_builder.as_markup()
 
 
